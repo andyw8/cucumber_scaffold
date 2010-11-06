@@ -1,8 +1,0 @@
-== Installation
-
-  $ gem install cucumber_scaffold
-
-== Usage
-
-  $ rails generate cucumber_scaffold_install
-  $ rails generate cucumber_scaffold_feature Post name:string body:text

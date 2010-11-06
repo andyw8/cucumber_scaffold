@@ -2,9 +2,11 @@ Manifest
 README.rdoc
 Rakefile
 TODO
-lib/generators/cucumber_scaffold/USAGE
-lib/generators/cucumber_scaffold/cucumber_scaffold_feature_generator.rb
-lib/generators/cucumber_scaffold/cucumber_scaffold_install_generator.rb
-lib/generators/cucumber_scaffold/templates/feature.feature
-lib/generators/cucumber_scaffold/templates/shared/web_steps_additional.rb
-lib/generators/cucumber_scaffold/templates/steps.rb
+cucumber_scaffold.gemspec
+lib/generators/cucumber_scaffold/feature/USAGE
+lib/generators/cucumber_scaffold/feature/feature_generator.rb
+lib/generators/cucumber_scaffold/feature/templates/feature.feature
+lib/generators/cucumber_scaffold/feature/templates/steps.rb
+lib/generators/cucumber_scaffold/install/USAGE
+lib/generators/cucumber_scaffold/install/install_generator.rb
+lib/generators/cucumber_scaffold/install/templates/shared/web_steps_additional.rb
