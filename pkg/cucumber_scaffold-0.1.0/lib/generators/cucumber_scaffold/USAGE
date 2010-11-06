@@ -3,15 +3,6 @@ Description:
 
 Example:
 
-  For first time use:
-
-    rails generate cucumber_scaffold_install
-
-    This will create:
-        features/shared/web_steps_additional.rb
-
-  Then for a feature:
-
     rails generate cucumber_scaffold_feature Post title:string body:text
 
     This will create:
