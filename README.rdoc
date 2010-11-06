@@ -4,5 +4,5 @@
 
 == Usage
 
-  $ rails generate nifty_cucumber_install
-  $ rails generate nifty_cucumber_feature Post name:string body:text
+  $ rails generate cucumber_scaffold_install
+  $ rails generate cucumber_scaffold_feature Post name:string body:text
