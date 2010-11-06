@@ -1,5 +1,3 @@
-<%= generated_by %>
-
 When /^I click "([^"]*)" in the (\d+)(?:st|nd|rd|th) row$/ do |link, pos|
   within("table tr:nth-child(#{pos.to_i+1})") do
     click_link link
