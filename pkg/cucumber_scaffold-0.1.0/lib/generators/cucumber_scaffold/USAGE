@@ -1,0 +1,31 @@
+Description:
+    Scaffolding for Cucumber features
+
+Example:
+
+  For first time use:
+
+    rails generate cucumber_scaffold_install
+
+    This will create:
+        features/shared/web_steps_additional.rb
+
+  Then for a feature:
+
+    rails generate cucumber_scaffold_feature Post title:string body:text
+
+    This will create:
+        features/manage_posts.rb
+        features/step_definitions/post_steps.rb
+
+    and will modify:
+        features/support/paths.rb
+
+Options:
+
+    --nifty
+    Generate features and steps which match the scaffold created by nifty-generators
+    ( https://github.com/ryanb/nifty-generators )
+
+    --tags
+    Include Cucumbers @tags matching each scenario to one or more controller actions

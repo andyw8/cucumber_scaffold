@@ -1,0 +1,10 @@
+Manifest
+README.rdoc
+Rakefile
+TODO
+lib/generators/cucumber_scaffold/USAGE
+lib/generators/cucumber_scaffold/cucumber_scaffold_feature_generator.rb
+lib/generators/cucumber_scaffold/cucumber_scaffold_install_generator.rb
+lib/generators/cucumber_scaffold/templates/feature.feature
+lib/generators/cucumber_scaffold/templates/shared/web_steps_additional.rb
+lib/generators/cucumber_scaffold/templates/steps.rb

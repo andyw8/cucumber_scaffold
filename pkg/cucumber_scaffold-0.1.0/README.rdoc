@@ -1,0 +1,8 @@
+== Installation
+
+  $ gem install cucumber_scaffold
+
+== Usage
+
+  $ rails generate nifty_cucumber_install
+  $ rails generate nifty_cucumber_feature Post name:string body:text
