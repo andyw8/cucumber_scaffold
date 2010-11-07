@@ -1,0 +1,11 @@
+* Test with webrat as well as capybara
+* Test with Rails 2.x
+* Test with Formtastic
+* Test with inherited_resources
+* Test with with inherited_resources_views
+* Add support for booleans (checkboxes)
+* Add support for date/time fields
+* Add support for belongs_to associations
+* Test for model names containing more than one word (e.g. DocumentCategory)
+* Add automated test suite
+* Prevent excess whitespace in generated files
