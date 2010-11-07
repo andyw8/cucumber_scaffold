@@ -9,3 +9,4 @@
 * Test for model names containing more than one word (e.g. DocumentCategory)
 * Add automated test suite
 * Prevent excess whitespace in generated files
+* Better interaction with Pickle
