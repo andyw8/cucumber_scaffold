@@ -279,4 +279,4 @@ Feature: Manage <%= plural_title %>
       Then the heading should be "<%= edit_heading %>"
       <% if index_title %>
       And the title should be "<%= edit_title %>"
-      <% end -%>
+      <% end %>
