@@ -2,6 +2,7 @@ Manifest
 README.rdoc
 Rakefile
 TODO
+cucumber_scaffold.gemspec
 lib/generators/cucumber_scaffold/feature/USAGE
 lib/generators/cucumber_scaffold/feature/feature_generator.rb
 lib/generators/cucumber_scaffold/feature/templates/feature.feature
