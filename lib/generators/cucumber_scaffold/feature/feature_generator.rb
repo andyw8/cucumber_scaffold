@@ -26,7 +26,7 @@ module CucumberScaffold
 
       template('feature.feature', "features/manage_#{plural}.feature")
       template('steps.rb', "features/step_definitions/#{singular}_steps.rb")
-  
+
       extra_paths = <<EOF
       when /edit page for that #{singular}/
         edit_#{singular}_path(@#{singular})
@@ -46,7 +46,7 @@ EOF
       gsub_file 'features/support/paths.rb', /'\/'/mi do |match|
         "#{match}\n" + extra_paths
       end
-  
+
     end
 
     private
@@ -160,6 +160,16 @@ EOF
         elsif attribute_type == 'integer'
           result = 10 + index
           result = -result if updated
+        elsif attribute_type == 'decimal'
+          result = 10.2 + index
+          result = -result if updated
+        elsif attribute_type == 'references'
+          model = attribute_name.camelize.constantize
+          result = model.first
+          result = model.last if updated
+        elsif attribute_type == 'boolean'
+          result = true
+          result = false if updated
         else
           raise "Cannot create default value for attribute type '#{attribute_type}'"
         end
@@ -183,10 +193,11 @@ EOF
       def tags(tags)
         tags
       end
-  
+
       def make_row(data)
         "| #{data.join(' | ')} |"
       end
-  
+
   end
 end
+
