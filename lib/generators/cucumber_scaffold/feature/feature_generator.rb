@@ -28,17 +28,17 @@ module CucumberScaffold
       template('steps.rb', "features/step_definitions/#{singular}_steps.rb")
   
       extra_paths = <<EOF
-      when /edit page for that #{singular}/
+      when /edit page for that #{singular.humanize.downcase}/
         edit_#{singular}_path(@#{singular})
-      when /page for that #{singular}/
-        raise 'no #{singular}' unless @#{singular}
+      when /page for that #{singular.humanize.downcase}/
+        raise 'no #{singular.humanize.downcase}' unless @#{singular}
         #{singular}_path(@#{singular})
-      when /edit page for the (\\d+)(?:st|nd|rd|th) #{singular}/
-        raise 'no #{plural}' unless @#{plural}
+      when /edit page for the (\\d+)(?:st|nd|rd|th) #{singular.humanize.downcase}/
+        raise 'no #{plural.humanize.downcase}' unless @#{plural}
         nth_#{singular} = @#{plural}[$1.to_i - 1]
         edit_#{singular}_path(nth_#{singular})
-      when /page for the (\\d+)(?:st|nd|rd|th) #{singular}/
-        raise 'no #{plural}' unless @#{plural}
+      when /page for the (\\d+)(?:st|nd|rd|th) #{singular.humanize.downcase}/
+        raise 'no #{plural.humanize.downcase}' unless @#{plural}
         nth_#{singular} = @#{plural}[$1.to_i - 1]
         #{singular}_path(nth_#{singular})
 EOF
@@ -69,11 +69,11 @@ EOF
       end
 
       def singular_title
-        singular.titleize
+        singular.humanize
       end
 
       def plural_title
-        plural.titleize
+        plural.humanize
       end
 
       def activerecord_table_header_row
@@ -81,103 +81,116 @@ EOF
       end
 
       def html_table_header_row
-        make_row(attribute_names.map(&:titleize))
+        make_row(attribute_names.map(&:humanize))
       end
 
       def attribute_names
-        @attributes.collect {|a| a.first[0]}
+        @attributes.collect {|a| a.first[0].gsub('_', ' ')}
       end
 
-      def html_single_resource(updated=nil, commented=nil)
+      def html_single_resource(options={})
         lines = []
         @attributes.each do |pair|
           attribute_name = pair.first[0]
-          attribute_value = pair.first[1]
-          lines << "| #{attribute_name.titleize}: | #{default_value(attribute_name, attribute_value, updated)} |"
+          attribute_type = pair.first[1]
+          default_value = default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :updated => options[:updated])
+          
+          lines << "| #{attribute_name.humanize}: | #{default_value} |"
         end
-        lines.join(commented ? LINE_BREAK_WITH_INDENT_COMMENTED : LINE_BREAK_WITH_INDENT)
+        lines.join(options[:commented] ? LINE_BREAK_WITH_INDENT_COMMENTED : LINE_BREAK_WITH_INDENT)
       end
 
       def form_single_resource_commented
-        form_single_resource(false, true)
+        form_single_resource(:commented => true)
       end
 
       def html_single_resource_commented
-        html_single_resource(false, true)
+        html_single_resource(:commented => true)
       end
 
-      def form_single_resource(updated=nil, commented=nil)
+      def form_single_resource(options = {})
         lines = []
         @attributes.each do |pair|
           attribute_name = pair.first[0]
-          attribute_value = pair.first[1]
-          lines << "| #{attribute_name.titleize} | #{default_value(attribute_name, attribute_value, updated)} |"
+          attribute_type = pair.first[1]
+          lines << "| #{attribute_name.humanize} | #{default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :updated => options[:updated], :form => true)} |"
         end
-        result = lines.join(commented ? LINE_BREAK_WITH_INDENT_COMMENTED : LINE_BREAK_WITH_INDENT)
+        result = lines.join(options[:commented] ? LINE_BREAK_WITH_INDENT_COMMENTED : LINE_BREAK_WITH_INDENT)
       end
 
-      def activerecord_single_resource(updated=nil)
+      def activerecord_single_resource(options={})
         lines = []
         @attributes.each do |pair|
           attribute_name = pair.first[0]
-          attribute_value = pair.first[1]
-          lines << "| #{attribute_name} | #{default_value(attribute_name, attribute_value, updated)} |"
+          attribute_type = pair.first[1]
+          lines << "| #{attribute_name} | #{default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :updated =>options[:updated])} |"
         end
         lines.join(LINE_BREAK_WITH_INDENT)
       end
 
       def html_resources
         [html_table_header_row,
-          html_table_row(1),
-          html_table_row(2),
-          html_table_row(3)].join(LINE_BREAK_WITH_INDENT)
+          html_table_row(:index => 1),
+          html_table_row(:index => 2),
+          html_table_row(:index => 3)].join(LINE_BREAK_WITH_INDENT)
       end
 
       def activerecord_resources
         [activerecord_table_header_row,
-           activerecord_table_row(1),
-           activerecord_table_row(2),
-           activerecord_table_row(3)].join(LINE_BREAK_WITH_INDENT)
+           activerecord_table_row(:index => 1),
+           activerecord_table_row(:index => 2),
+           activerecord_table_row(:index => 3)].join(LINE_BREAK_WITH_INDENT)
       end
 
       def activerecord_single_resource_updated
-        activerecord_single_resource(true)
+        activerecord_single_resource(:updated => true)
       end
 
       def form_single_resource_updated
-        form_single_resource(true)
+        form_single_resource(:updated => true)
       end
 
       def html_single_resource_updated
-        html_single_resource(true)
+        html_single_resource(:updated => true)
       end
 
-      def default_value(attribute_name, attribute_type, updated=false, index=1)
+      def default_value(options={}) # attribute_name, attribute_type, updated=false, index=1
         # TODO use an options hash instead of all these arguments
-        if ['string', 'text'].include?(attribute_type)
-          result = "#{attribute_name} #{index}"
-          result += ' updated' if updated
-        elsif attribute_type == 'integer'
-          result = 10 + index
-          result = -result if updated
+        
+        options[:index] ||= 10
+        
+        if ['string', 'text'].include?(options[:attribute_type])
+          result = "#{options[:attribute_name].humanize.downcase} #{options[:index]}"
+          result += ' updated' if options[:updated]
+        elsif options[:attribute_type] == 'integer'
+          result = 10 + options[:index]
+          result = -result if options[:updated]
+        elsif options[:attribute_type] == 'boolean'
+          if options[:form]
+            result = '[x]'
+            result = '[ ]' if options[:updated]
+          else
+            result = true
+            result = false if options[:updated]
+          end
         else
-          raise "Cannot create default value for attribute type '#{attribute_type}'"
+          raise "Cannot create default value for attribute type '#{options[:attribute_type]}'"
         end
         result
       end
 
-      def activerecord_table_row(n)
+      def activerecord_table_row(options)
         data = []
         @attributes.each do |attribute|
           attribute_name = attribute.first[0]
           attribute_type = attribute.first[1]
-          data << default_value(attribute_name, attribute_type, false, n)
+          data << default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :index => options[:index])
         end
         make_row(data)
       end
 
-      def html_table_row(n)
-        activerecord_table_row(n)
+      def html_table_row(options)
+        activerecord_table_row(options)
       end
 
       def tags(tags)

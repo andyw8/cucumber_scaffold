@@ -5,7 +5,8 @@ module CucumberScaffold
 
     def do_it
 
-      template('shared/web_steps_additional.rb', 'features/step_definitions/web_steps_additional.rb')
+      template('step_definitions/web_steps_additional.rb', 'features/step_definitions/web_steps_additional.rb')
+      template('support/table_helpers.rb', 'features/support/table_helpers.rb')
 
     end
 

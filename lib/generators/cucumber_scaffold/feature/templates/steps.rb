@@ -1,10 +1,10 @@
 <%= generated_by %>
 
-Given /^a <%= singular %> exists$/ do
-  @<%= singular %> = <%= singular_title %>.create!(valid_<%= singular %>_attributes)
+Given /^a <%= singular.humanize.downcase %> exists$/ do
+  @<%= singular %> = <%= singular.camelcase %>.create!(valid_<%= singular %>_attributes)
 end
 
-Then /^I should see the following <%= singular %>:$/ do |expected_table|
+Then /^I should see the following <%= singular.humanize.downcase %>:$/ do |expected_table|
   
   <% if nifty? %>
   show_fields_css_query = 'body p strong'
@@ -22,16 +22,18 @@ Then /^I should see the following <%= singular %>:$/ do |expected_table|
   assert_equal actual, expected_table.rows_hash
 end
 
-Then /^I should see the following <%= plural %>:$/ do |expected_table|
+Then /^I should see the following <%= plural.humanize.downcase %>:$/ do |expected_table|
   expected_table.diff!(tableish('table tr', 'td,th'))
 end
 
-Given /^the following <%= plural %>:$/ do |table|
-  @<%= plural %> = <%= singular_title %>.create!(table.hashes)
+Given /^the following <%= plural.humanize.downcase %>:$/ do |table|
+  hashes = replace_spaces_with_underscores_in_keys(table.hashes)
+  @<%= plural %> = <%= singular.camelcase %>.create!(hashes)
 end
 
-Given /^the following <%= singular %>:$/ do |table|
-  @<%= singular %> = <%= singular_title %>.create!(table.rows_hash)
+Given /^the following <%= singular.humanize.downcase %>:$/ do |table|
+  hashes = replace_spaces_with_underscores_in_keys(table.rows_hash)
+  @<%= singular %> = <%= singular.camelcase %>.create!(hashes)
 end
 
 def valid_<%= singular %>_attributes
