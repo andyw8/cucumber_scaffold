@@ -26,7 +26,7 @@ module CucumberScaffold
 
       template('feature.feature', "features/manage_#{plural}.feature")
       template('steps.rb', "features/step_definitions/#{singular}_steps.rb")
-  
+
       extra_paths = <<EOF
       when /edit page for that #{singular.humanize.downcase}/
         edit_#{singular}_path(@#{singular})
@@ -46,7 +46,7 @@ EOF
       gsub_file 'features/support/paths.rb', /'\/'/mi do |match|
         "#{match}\n" + extra_paths
       end
-  
+
     end
 
     private
@@ -154,9 +154,7 @@ EOF
         html_single_resource(:updated => true)
       end
 
-      def default_value(options={}) # attribute_name, attribute_type, updated=false, index=1
-        # TODO use an options hash instead of all these arguments
-        
+      def default_value(options={})
         options[:index] ||= 10
         
         if ['string', 'text'].include?(options[:attribute_type])
@@ -165,6 +163,13 @@ EOF
         elsif options[:attribute_type] == 'integer'
           result = 10 + options[:index]
           result = -result if options[:updated]
+        elsif options[:attribute_type] == 'decimal'
+          result = 10.2 + index
+          result = -result if options[:updated]
+        elsif ptions[:attribute_type] == 'references'
+          model = options[:attribute_name].camelize.constantize
+          result = model.first
+          result = model.last if updated
         elsif options[:attribute_type] == 'boolean'
           if options[:form]
             result = '[x]'
@@ -196,10 +201,11 @@ EOF
       def tags(tags)
         tags
       end
-  
+
       def make_row(data)
         "| #{data.join(' | ')} |"
       end
-  
+
   end
 end
+
