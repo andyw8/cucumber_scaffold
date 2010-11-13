@@ -116,7 +116,7 @@ Feature: Manage <%= plural_title.humanize.downcase %>
       #
       # In order to confirm that the user is redirected to the correct page
       # after create, you'll need to add an entry to paths.rb to uniquely
-      # find a <%= singular .humanize.downcase%>, e.g.:
+      # find a <%= singular.humanize.downcase %>, e.g.:
       #
       #   when /page for the <%= singular.humanize.downcase %> with name "([^"]*)"$/
       #     conditions = { :conditions => {:name => $1} }
@@ -136,7 +136,7 @@ Feature: Manage <%= plural_title.humanize.downcase %>
     Scenario: Attempt to create a new <%= singular.humanize.downcase %> with invalid input
       Pending
       # <%= pending_explanation_1 %>
-      # Given I am on the new <%= singular .humanize.downcase%> page
+      # Given I am on the new <%= singular.humanize.downcase %> page
       # When I fill in the form with:
       #   <%= form_single_resource_commented %>
       # And I press "<%= create_button_title %>"
@@ -234,7 +234,7 @@ Feature: Manage <%= plural_title.humanize.downcase %>
     <%= tags('@show @index') %>
     Scenario: Navigate from show <%= singular.humanize.downcase %> page to <%= plural.humanize.downcase %> page
       Given a <%= singular.humanize.downcase %> exists
-      And I am on the page for that <%= singular .humanize.downcase%>
+      When I go to the page for that <%= singular.humanize.downcase %>
       <% if nifty? %>
       And I follow "View All"
       <% else %>
