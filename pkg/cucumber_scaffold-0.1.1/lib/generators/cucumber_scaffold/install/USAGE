@@ -1,9 +1,0 @@
-Description:
-    Scaffolding installer for Cucumber features
-
-Example:
-
-    rails generate cucumber_scaffold_install
-
-    This will create:
-        features/shared/web_steps_additional.rbtching each scenario to one or more controller actions
