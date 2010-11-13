@@ -157,26 +157,28 @@ EOF
       def default_value(options={})
         options[:index] ||= 10
         
+        updated = options[:updated]
+        
         if ['string', 'text'].include?(options[:attribute_type])
           result = "#{options[:attribute_name].humanize.downcase} #{options[:index]}"
-          result += ' updated' if options[:updated]
+          result += ' updated' if updated
         elsif options[:attribute_type] == 'integer'
           result = 10 + options[:index]
-          result = -result if options[:updated]
+          result = -result if updated
         elsif options[:attribute_type] == 'decimal'
-          result = 10.2 + index
-          result = -result if options[:updated]
-        elsif ptions[:attribute_type] == 'references'
+          result = 10.2 + options[:index]
+          result = -result if updated
+        elsif options[:attribute_type] == 'references'
           model = options[:attribute_name].camelize.constantize
           result = model.first
           result = model.last if updated
         elsif options[:attribute_type] == 'boolean'
           if options[:form]
             result = '[x]'
-            result = '[ ]' if options[:updated]
+            result = '[ ]' if updated
           else
             result = true
-            result = false if options[:updated]
+            result = false if updated
           end
         else
           raise "Cannot create default value for attribute type '#{options[:attribute_type]}'"
