@@ -26,13 +26,33 @@ end
 def form_field_for_label(label)
   input_tags = label.parent.css('input,textarea')
   return if input_tags.size == 0
-  if input_tags.size > 1
+  # rails renders a hidden input alongside each checkbox
+  input_tag = input_tags.last
+  if input_tags.size > 1 && input_tag['type'] != 'checkbox'
     raise "Wrong number of input tags while parsing form (found #{input_tags.size})"
   end
-  input_tag = input_tags.first
   if input_tag.name == 'textarea'
     input_tag.inner_html
   elsif input_tag.name == 'input'
-    input_tag['value']
+    if input_tag['type'] == 'checkbox'
+      input_tag['checked'] == 'checked' ? '[x]' : '[ ]'
+    else
+      input_tag['value']
+    end
+  end
+end
+
+When /^(?:|I )fill in the form with(?: within "([^"]*)")?:$/ do |selector, fields|
+  with_scope(selector) do
+    fields.rows_hash.each do |name, value|
+      # assume it's a checkbox
+      if value == '[x]'
+        When %{I check "#{name}"}
+      elsif value == '[ ]'
+        When %{I uncheck "#{name}"}
+      else
+        When %{I fill in "#{name}" with "#{value}"}
+      end
+    end
   end
 end
