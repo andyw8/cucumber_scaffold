@@ -36,239 +36,164 @@ Then run the cucumber_scaffold generator with the same parameters:
     [stakeholder]
     wants [behaviour]
 
-      @index
       Scenario: List all posts
         Given the following posts:
-          | name | body | rating | published | 
-          | name 1 | body 1 | 11 | true | 
-          | name 2 | body 2 | 12 | true | 
-          | name 3 | body 3 | 13 | true | 
+          | name   | body   | rating | published |
+          | name 1 | body 1 | 11     | true      |
+          | name 2 | body 2 | 12     | true      |
+          | name 3 | body 3 | 13     | true      |
         When I go to the posts page
         Then I should see the following posts:
-          | Name | Body | Rating | Published | 
-          | name 1 | body 1 | 11 | true | 
-          | name 2 | body 2 | 12 | true | 
-          | name 3 | body 3 | 13 | true | 
+          | Name   | Body   | Rating | Published |
+          | name 1 | body 1 | 11     | true      |
+          | name 2 | body 2 | 12     | true      |
+          | name 3 | body 3 | 13     | true      |
+        And the heading should be "Listing posts"
 
-      @show
       Scenario: View a post
-        Given the following post:
-          | name | name 10 |
-          | body | body 10 |
-          | rating | 20 |
-          | published | true |
-        When I go to the page for that post
+        Given the following posts:
+          | name   | body   | rating | published |
+          | name 1 | body 1 | 11     | true      |
+          | name 2 | body 2 | 12     | true      |
+          | name 3 | body 3 | 13     | true      |
+        When I go to the posts page
+        And I click "Show" in the 2nd row
         Then I should see the following post:
-          | Name: | name 10 |
-          | Body: | body 10 |
-          | Rating: | 20 |
-          | Published: | true |
+          | Name:      | name 2 |
+          | Body:      | body 2 |
+          | Rating:    | 12     |
+          | Published: | true   |
+        When I follow "Back"
+        Then I should be on the posts page
 
-      @edit
       Scenario: Edit a post
         Given the following post:
-          | name | name 10 |
-          | body | body 10 |
-          | rating | 20 |
-          | published | true |
-        When I go to the edit page for that post
+          | name      | name 10 |
+          | body      | body 10 |
+          | rating    | 20      |
+          | published | true    |
+        When I go to the page for that post
+        And I follow "Edit"
         Then I should see the following form field values:
-          | Name | name 10 |
-          | Body | body 10 |
-          | Rating | 20 |
-          | Published | [x] |
+          | Name      | name 10 |
+          | Body      | body 10 |
+          | Rating    | 20      |
+          | Published | [x]     |
+        Then the heading should be "Editing post"
+        When I follow "Show"
+        Then I should be on the page for that post
 
-      @index @destroy
       Scenario: Delete a post via the index page
         Given the following posts:
-          | name | body | rating | published | 
-          | name 1 | body 1 | 11 | true | 
-          | name 2 | body 2 | 12 | true | 
-          | name 3 | body 3 | 13 | true |
+          | name   | body   | rating | published |
+          | name 1 | body 1 | 11     | true      |
+          | name 2 | body 2 | 12     | true      |
+          | name 3 | body 3 | 13     | true      |
         When I go to the posts page
         And I click "Destroy" in the 2nd row
         Then I should see the following posts:
-          | Name | Body | Rating | Published | 
-          | name 1 | body 1 | 11 | true | 
-          | name 3 | body 3 | 13 | true |
+          | Name   | Body   | Rating | Published |
+          | name 1 | body 1 | 11     | true      |
+          | name 3 | body 3 | 13     | true      |
         And I should be on the posts page
-      
     
-      @new @create @show
+      Scenario: New post page  
+        Given I am on the posts page
+        When I follow "New Post"
+        Then I should be on the new post page
+        When I follow "Back"
+        Then I should be on the posts page
+
       Scenario: Create a new post
         Pending
         # Given I am on the new post page
         # When I fill in the form with:
-        #   | Name | name 10 |
-        #   | Body | body 10 |
-        #   | Rating | 20 |
-        #   | Published | [x] |
+        #   | Name      | name 10 |
+        #   | Body      | body 10 |
+        #   | Rating    | 20      |
+        #   | Published | [x]     |
         # And I press "Create"
         # Then I should see "Post was successfully created."
         # And I should see the following post:
-        #   | Name: | name 10 |
-        #   | Body: | body 10 |
-        #   | Rating: | 20 |
-        #   | Published: | true |
-        #
-        # In order to confirm that the user is redirected to the correct page
-        # after create, you'll need to add an entry to paths.rb to uniquely
-        # find a post, e.g.:
-        #
-        #   when /page for the post with name "([^"]*)"$/
-        #     conditions = { :conditions => {:name => $1} }
-        #     matches = Post.all(conditions)
-        #     if matches.size == 0
-        #       raise "Could not find any posts using criteria #{conditions.inspect}"
-        #     elsif matches.size > 1
-        #       raise "Could not find a unique post using criteria #{conditions.inspect} (#{matches.size} matches)"
-        #     end
-        #     post_path(matches.first)
-        #
-        # Then add a step such as this to the scenario:
-        #
-        #   And I should be on the page for the post with name "..."
+        #   | Name:      | name 10 |
+        #   | Body:      | body 10 |
+        #   | Rating:    | 20      |
+        #   | Published: | true    |
 
-      @new @create
       Scenario: Attempt to create a new post with invalid input
         Pending
         # You should use this scenario as the basis for scenarios involving ActiveRecord validations, or delete it if it's not required
         # Given I am on the new post page
         # When I fill in the form with:
-        #   | Name | name 10 |
-        #   | Body | body 10 |
-        #   | Rating | 20 |
-        #   | Published | [x] |
+        #   | Name      | name 10 |
+        #   | Body      | body 10 |
+        #   | Rating    | 20      |
+        #   | Published | [x]     |
         # And I press "Create"
-        # Then I should see "prohibited this post from being saved:"
+        # Then I should see "1 error prohibited this post from being saved:"
         #
         # [You should add checks for specific errors here. It may be appropriate to add extra scenarios.]
         #
         # And I should see the following form field values:
-        #   | Name | name 10 |
-        #   | Body | body 10 |
-        #   | Rating | 20 |
-        #   | Published | [x] |
+        #   | Name      | name 10 |
+        #   | Body      | body 10 |
+        #   | Rating    | 20      |
+        #   | Published | [x]     |
 
-      @edit @update
       Scenario: Attempt to update a post with invalid input
         Pending
         # You should use this scenario as the basis for scenarios involving ActiveRecord validations, or delete it if it's not required
         # Given a post exists
         # When I go to the edit page for that post
         # And I fill in the form with:
-        #   | Name | name 10 |
-        #   | Body | body 10 |
-        #   | Rating | 20 |
-        #   | Published | [x] |
+        #   | Name      | name 10 |
+        #   | Body      | body 10 |
+        #   | Rating    | 20      |
+        #   | Published | [x]     |
         # And I press "Update"
-        # Then I should see "prohibited this post from being saved:"
+        # Then I should see "1 error prohibited this post from being saved:"
         #
         # [You should add checks for specific errors here. It may be appropriate to add extra scenarios.]
         #
         # And I should see the following form field values:
-        #   | Name | name 10 |
-        #   | Body | body 10 |
-        #   | Rating | 20 |
-        #   | Published | [x] |
+        #   | Name      | name 10 |
+        #   | Body      | body 10 |
+        #   | Rating    | 20      |
+        #   | Published | [x]     |
 
-      @edit @update @show
       Scenario: Update a post
         Given the following post:
-          | name | name 10 |
-          | body | body 10 |
-          | rating | 20 |
-          | published | true |
+          | name      | name 10 |
+          | body      | body 10 |
+          | rating    | 20      |
+          | published | true    |
         When I go to the edit page for that post
         And I fill in the form with:
-          | Name | name 10 updated |
-          | Body | body 10 updated |
-          | Rating | -20 |
-          | Published | [ ] | 
+          | Name      | name 10 updated |
+          | Body      | body 10 updated |
+          | Rating    | -20             |
+          | Published | [ ]             |
         And I press "Update"
         Then I should be on the page for that post
         And I should see "Post was successfully updated."
         And I should see the following post:
-          | Name: | name 10 updated |
-          | Body: | body 10 updated |
-          | Rating: | -20 |
-          | Published: | false |
+          | Name:      | name 10 updated |
+          | Body:      | body 10 updated |
+          | Rating:    | -20             |
+          | Published: | false           |
 
-      @index @new
-      Scenario: Navigate from the posts page to the new post page
-        Given I am on the posts page
-        When I follow "New Post"
-        Then I should be on the new post page
-
-      @index @show
-      Scenario: Navigate from posts page to the show post page
-        Given the following posts:
-          | name | body | rating | published |
-          | name 1 | body 1 | 11 | true | 
-          | name 2 | body 2 | 12 | true |
-          | name 3 | body 3 | 13 | true |
-        When I go to the posts page
-        And I click "Show" in the 2nd row
-        Then I should be on the page for the 2nd post
-
-      @index @edit
       Scenario: Navigate from posts page to the edit post page
         Given the following posts:
-          | name | body | rating | published | 
-          | name 1 | body 1 | 11 | true | 
-          | name 2 | body 2 | 12 | true | 
-          | name 3 | body 3 | 13 | true |
+          | name   | body   | rating | published |
+          | name 1 | body 1 | 11     | true      |
+          | name 2 | body 2 | 12     | true      |
+          | name 3 | body 3 | 13     | true      |
         When I go to the posts page
         And I click "Edit" in the 2nd row
         Then I should be on the edit page for the 2nd post
 
-      @new @index
-      Scenario: Navigate from new post page to posts page
-        Given I am on the new post page
-        When I follow "Back"
-        Then I should be on the posts page
-
-      @edit @show
-      Scenario: Navigate from the edit post page to the show post page
-        Given a post exists
-        When I go to the edit page for that post
-        And I follow "Show"
-        Then I should be on the page for that post
-
-      @edit @index
       Scenario: Navigate from edit post page to the posts page
         Given a post exists
         When I go to the edit page for that post
         And I follow "Back"
         Then I should be on the posts page
-
-      @show @edit
-      Scenario: Navigate from show post page to edit post page
-        Given a post exists
-        When I go to the page for that post
-        And I follow "Edit"
-        Then I should be on the edit page for that post
-
-      @show @index
-      Scenario: Navigate from show post page to posts page
-        Given a post exists
-        And I am on the page for that post
-        And I follow "Back"
-        Then I should be on the posts page
-
-      @index
-      Scenario: Posts page title
-        When I go to the posts page
-        Then the heading should be "Listing posts"
-      
-      @new
-      Scenario: New post page title
-        When I go to the new post page
-        Then the heading should be "New post"
-      
-      @edit
-      Scenario: Edit post page title
-        Given a post exists
-        When I go to the edit page for that post
-        Then the heading should be "Editing post"
-

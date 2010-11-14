@@ -29,6 +29,7 @@ module CucumberScaffold
 
       extra_paths = <<EOF
       when /edit page for that #{singular.humanize.downcase}/
+        raise 'no #{singular.humanize.downcase}' unless @#{singular}
         edit_#{singular}_path(@#{singular})
       when /page for that #{singular.humanize.downcase}/
         raise 'no #{singular.humanize.downcase}' unless @#{singular}
@@ -93,19 +94,11 @@ EOF
         @attributes.each do |pair|
           attribute_name = pair.first[0]
           attribute_type = pair.first[1]
-          default_value = default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :updated => options[:updated])
+          default_value = default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :updated => options[:updated], :index => options[:index])
           
           lines << "| #{attribute_name.humanize}: | #{default_value} |"
         end
         lines.join(options[:commented] ? LINE_BREAK_WITH_INDENT_COMMENTED : LINE_BREAK_WITH_INDENT)
-      end
-
-      def form_single_resource_commented
-        form_single_resource(:commented => true)
-      end
-
-      def html_single_resource_commented
-        html_single_resource(:commented => true)
       end
 
       def form_single_resource(options = {})
@@ -113,7 +106,23 @@ EOF
         @attributes.each do |pair|
           attribute_name = pair.first[0]
           attribute_type = pair.first[1]
-          lines << "| #{attribute_name.humanize} | #{default_value(:attribute_name => attribute_name, :attribute_type => attribute_type, :updated => options[:updated], :form => true)} |"
+          
+          if options[:blank]
+            if attribute_type == 'boolean'
+              value = '[ ]'
+            else
+              value = ''
+            end
+          else
+            value = default_value(
+             :attribute_name => attribute_name,
+             :attribute_type => attribute_type,
+             :updated => options[:updated],
+             :form => true,
+             :index => options[:index])
+          end
+          
+          lines << "| #{attribute_name.humanize} | #{value} |"
         end
         result = lines.join(options[:commented] ? LINE_BREAK_WITH_INDENT_COMMENTED : LINE_BREAK_WITH_INDENT)
       end
@@ -140,18 +149,6 @@ EOF
            activerecord_table_row(:index => 1),
            activerecord_table_row(:index => 2),
            activerecord_table_row(:index => 3)].join(LINE_BREAK_WITH_INDENT)
-      end
-
-      def activerecord_single_resource_updated
-        activerecord_single_resource(:updated => true)
-      end
-
-      def form_single_resource_updated
-        form_single_resource(:updated => true)
-      end
-
-      def html_single_resource_updated
-        html_single_resource(:updated => true)
       end
 
       def default_value(options={})
@@ -198,10 +195,6 @@ EOF
 
       def html_table_row(options)
         activerecord_table_row(options)
-      end
-
-      def tags(tags)
-        tags
       end
 
       def make_row(data)
