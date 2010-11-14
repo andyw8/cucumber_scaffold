@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cucumber_scaffold}
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andy Waite"]
-  s.date = %q{2010-11-13}
+  s.date = %q{2010-11-14}
   s.description = %q{Generate scaffolding for Cucumber features and steps definitions}
   s.email = %q{andy@andywaite.com}
   s.extra_rdoc_files = ["README.rdoc", "TODO", "lib/generators/cucumber_scaffold/feature/USAGE", "lib/generators/cucumber_scaffold/feature/feature_generator.rb", "lib/generators/cucumber_scaffold/feature/templates/feature.feature", "lib/generators/cucumber_scaffold/feature/templates/steps.rb", "lib/generators/cucumber_scaffold/install/USAGE", "lib/generators/cucumber_scaffold/install/install_generator.rb", "lib/generators/cucumber_scaffold/install/templates/step_definitions/web_steps_additional.rb", "lib/generators/cucumber_scaffold/install/templates/support/table_helpers.rb"]

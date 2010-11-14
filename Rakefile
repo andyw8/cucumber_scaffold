@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'  
 require 'echoe'  
   
-Echoe.new('cucumber_scaffold', '0.1.4') do |p|  
+Echoe.new('cucumber_scaffold', '0.1.5') do |p|  
   p.description     = "Generate scaffolding for Cucumber features and steps definitions"  
   p.url             = "http://github.com/andyw8/cucumber_scaffold"  
   p.author          = "Andy Waite"  
